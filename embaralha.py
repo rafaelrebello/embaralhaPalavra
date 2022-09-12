@@ -13,6 +13,15 @@ palavra correta e o número de tentativas que ele utilizou.
 
 import random
 
+def cor(cor,texto):
+    cores = {
+        'P' : '\033[95m',
+        'B' : '\033[94m',
+        'G' : '\033[92m',
+        'Y' : '\033[93m',
+        'R' : '\033[91m'
+    }
+    return f'{cores.get(cor)}{texto}\033[0m'
 
 
 dicTema = {  #cria dicionário com os temas
@@ -24,25 +33,33 @@ def stringTemas(): #obtem a string com temas do dicionário
     temas = ([x[0:-4] for x in dicTema.values()])
     strTemas = "Temas: " 
     for x,y in enumerate(temas): strTemas+= (f"{x+1}-{y} ")
-    return strTemas
+    return cor("P", strTemas)
 
-def selecionarTema():
+def selecionarTema(): #seleciona e valida o tema
     while True:
         print(stringTemas())
-        intTema = int(input("Selecione o seu tema:"))
-        if intTema>0 and intTema<=len(dicTema):
-            return intTema
-        else:
-            print("número inválido")
+        intTema = int(input("Selecione o seu tema: "))
 
-def selecionarDificuldade():
-    while True:
-        print("1 - Fácil / 2 - Intermediário / 3 - Difícil")
-        intDificuldade = int(input("Selecione a dificuldade: "))
-        if intDificuldade>0 and intDificuldade<=3:
-            return intDificuldade
+        if intTema>0 and intTema<=len(dicTema):
+            print(cor("G",("Tema selecionado: "+ dicTema.get(intTema)[0:-4] + "\n")))
+            return intTema
+
         else:
-            print("número inválido")
+            print( cor("R","número inválido") )
+
+def selecionarDificuldade():  #seleciona e valida a dificuldade
+    dificuldades = "1 - Fácil / 2 - Intermediário / 3 - Difícil"
+    while True:
+        print(cor("P",dificuldades))
+        intDificuldade = int(input("Selecione a dificuldade: "))
+
+        if intDificuldade>0 and intDificuldade<=3:
+            dificuldades = dificuldades.split("/")
+            print(cor("G","dificuldade selecionada:" + dificuldades[intDificuldade-1]+ "\n"))
+            return intDificuldade
+
+        else:
+            print(cor("R","número inválido"))
 
 def embaralha(s): #função para embaralhar a palavra
     embaralhado = list(s)
@@ -60,17 +77,6 @@ def obterPalavras(intTema,intDificuldade): #função para obter a palavra de um 
 
     return(random.choice(saida[(intDificuldade-1)].split()))
 
-
-
-entradaTema = selecionarTema()
-
-entradaDificuldade = selecionarDificuldade()
-
-print("\n")
-
-palavra = obterPalavras(entradaTema,entradaDificuldade).upper() #palavra a ser descobrida
-
-tentativas = 5 #numero de tentativas
 palavrasAnimo = { #frases de ânimo
     1:"Não desista!",
     2:"Continue tentando.",
@@ -78,6 +84,14 @@ palavrasAnimo = { #frases de ânimo
     4:"Vamos lá!",
     5:"Tente novamente!"
     }
+
+entradaTema = selecionarTema()
+
+entradaDificuldade = selecionarDificuldade()
+
+palavra = obterPalavras(entradaTema,entradaDificuldade).upper() #palavra a ser descobrida
+
+tentativas = 5 #numero de tentativas
 
 while tentativas > 0:
     palavraEmbaralhada = embaralha(palavra) #palavra a ser descoberta embaralhada
@@ -87,12 +101,13 @@ while tentativas > 0:
     entrada = input("Digite a sua resposta: ") #recebe a palavra do jogador
     entrada = entrada.upper() #transforma a entrada em maiúscula 
     
+
     if entrada == palavra: #compara o valor recebido com a palavra a ser adivinhada
-        print("Parabéns")
+        print(cor("G","Parabéns, você acertou"))
         break #sai do laço de repetição
 
-    print(palavrasAnimo.get(random.randint(1,5))) #dá uma frase de ânimo aleatória para o jogador caso ele erre
+    print(cor("Y",palavrasAnimo.get(random.randint(1,5)) + "\n")) #dá uma frase de ânimo aleatória para o jogador caso ele erre
     tentativas-= 1 #reduz uma tentativa
 
 if tentativas==0:
-    print("Você perdeu")
+    print(cor("R","Você perdeu"))
