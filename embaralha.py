@@ -11,7 +11,7 @@ palavra correta e o número de tentativas que ele utilizou.
 """
 
 import random
-
+import glob
 
 def cor(cor, texto):
     cores = {
@@ -23,11 +23,9 @@ def cor(cor, texto):
     }
     return f"{cores.get(cor)}{texto}\033[0m"
 
-
-dicTema = {  # cria dicionário com os temas
-    1: "Animais.txt",
-    2: "Frutas.txt",
-}
+listaTemas = glob.glob('Temas/*.txt') 
+listaTemas = (x[6:] for x in listaTemas)
+dicTema = {x+1:y for x,y in enumerate(listaTemas)}  # cria o dicionário com os temas
 
 
 def stringTemas():  # obtem a string com temas do dicionário
@@ -111,8 +109,8 @@ palavra = obterPalavras(
 
 tentativas = 5  # numero de tentativas
 
-while tentativas > 0:
-    palavraEmbaralhada = embaralha(palavra)  # palavra a ser descoberta embaralhada
+palavraEmbaralhada = embaralha(palavra)
+while tentativas > 0: 
 
     print("Tentativas restantes: ", tentativas)  # mostra o número de tentativas
     print(
