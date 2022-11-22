@@ -82,7 +82,7 @@ def obterPalavras(
     intTema, intDificuldade
 ):  # função para obter a palavra de um arquivo txt
     saida = []
-    nomeArq = dicTema.get(intTema)
+    nomeArq = "Temas/"+dicTema.get(intTema)
 
     with open(nomeArq) as f:
         for line in f:
