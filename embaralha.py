@@ -99,6 +99,22 @@ palavrasAnimo = {  # frases de ânimo
     5: "Tente novamente!",
 }
 
+def verificaTemas():
+    remover = []
+    for x,nomeArq in enumerate(dicTema.values()):
+        saida = []
+        with open("Temas/"+nomeArq) as f:
+            for line in f:
+                saida.append(line.strip())
+        if len(saida) != 3: 
+            print(f"{nomeArq} Inválido, verificar número de linhas")
+            remover.append(x+1)
+    for x in remover:
+        dicTema.pop(x)
+
+verificaTemas()
+if len(dicTema) < 1: raise Exception("Nenhum tema disponível")
+
 entradaTema = selecionarTema()
 
 entradaDificuldade = selecionarDificuldade()
@@ -110,6 +126,8 @@ palavra = obterPalavras(
 tentativas = 5  # numero de tentativas
 
 palavraEmbaralhada = embaralha(palavra)
+if palavraEmbaralhada == palavra: palavraEmbaralhada = embaralha(palavra)
+
 while tentativas > 0: 
 
     print("Tentativas restantes: ", tentativas)  # mostra o número de tentativas
